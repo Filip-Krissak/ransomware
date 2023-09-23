@@ -12,7 +12,7 @@ def generate_salt(size=16):
     return secrets.token_bytes(size)
 
 def derive_key(salt,password):
-    kdf = Scrypt(salt = salt,lenght = 32, n = 2**14, r = 8, p = 1)
+    kdf = Scrypt(salt = salt,length = 32, n = 2**14, r = 8, p = 1)
     return kdf.derive(password.encode())
 
 def load_salt():
@@ -45,7 +45,7 @@ def decrypt(filename, key):
         
     try:
         decrypted_data = f.decrypt(encrypted_data)
-    except cryptography.fernet.invalidtoken:
+    except cryptography.fernet.InvalidToken:
         print('[!] Invalid token, most likely the password is incorrect')
         return
     with open(filename,'wb') as file:
@@ -95,14 +95,14 @@ if __name__ == '__main__':
     if encrypt_ and decrypt_:
         raise TypeError('Please specify whether you want to encrypt the file or decrypt it.')
     elif encrypt_:
-        if os.path.is_file(args.path):
+        if os.path.isfile(args.path):
             encrypt(args.path,key)
-        elif os.path.is_dir(args.path):
+        elif os.path.isdir(args.path):
             encrypt_folder(args.path,key)
     elif decrypt_:
-        if os.path.is_file(args.path):
+        if os.path.isfile(args.path):
             decrypt(args.path,key)
-        elif os.path.is_dir(args.path):
+        elif os.path.isdir(args.path):
             decrypt_folder(args.path,key)
     else:
         raise TypeError('Please specify whether you want to encrypt the file or decrypt it.')
